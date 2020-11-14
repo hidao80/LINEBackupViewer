@@ -1,0 +1,94 @@
+/*吹き出し*/
+.balloon_l,
+.balloon_r{
+  margin: 10px 0;
+  display:flex;
+  justify-content: flex-start;
+  align-items: flex-start; /*縦位置を上揃え*/
+/*   align-items: center; */ /*縦位置を真ん中揃え*/
+}
+.balloon_r{
+  justify-content:flex-end;
+}
+.balloon_l .says {
+  /*max-width:500px; /*最大幅は任意*/
+  max-width:calc(80vw - 50px); /*最大幅は任意*/
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  padding: 17px 13px 15px 18px;
+  border-radius: 12px;
+  /*background: #99dddd;/*色は任意*/
+  background: white;/*色は任意*/
+  box-sizing:border-box;
+  margin:0 !important;
+  line-height:1.5;
+  font-size: smaller;
+/*   align-items: center; */
+}
+.balloon_r .says {
+  /*max-width:500px; /*最大幅は任意*/
+  max-width:calc(80vw - 50px); /*最大幅は任意*/
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  padding: 17px 13px 15px 18px;
+  border-radius: 12px;
+  /*background: #99dddd;/*色は任意*/
+  background: #85e249;/*色は任意*/
+  box-sizing:border-box;
+  margin:0 !important;
+  line-height:1.5;
+  font-size: smaller;
+/*   align-items: center; */
+}
+.says p{
+  margin:8px 0 0 !important; 
+}
+.says p:first-child{
+  margin-top:0 !important;
+}
+.says:after {
+  content: "";
+  position: absolute;
+  border: 10px solid transparent;
+/*   margin-top:-3px;  */
+}
+.balloon_l .says:after {
+  left: -26px;
+  /*border-right: 22px solid #99dddd;*/
+  border-right: 22px solid white;
+}
+.balloon_r .says:after {
+  right: -26px;
+  /*border-left: 22px solid #99dddd;*/
+  border-left: 22px solid #85e249;
+}
+
+.balloon_l:before {
+  display: inline-block;
+  width: 50px; /*任意のサイズ*/
+  height: 50px;
+  padding-left: 25px;
+  content: '';
+  background-size: contain;
+  vertical-align: top;
+  background-repeat: no-repeat;
+/*  background-position: left;*/
+  background-image: url(../img/dog.png);  /* ←アイコンはここを変更 */
+}
+.balloon_r:after {
+  display: inline-block;
+  width: 50px; /*任意のサイズ*/
+  height: 50px;
+  padding-right: 25px;
+  content: '';
+  background-size: contain;
+  vertical-align: top;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-image:url(../img/cat.png);  /* ←アイコンはここを変更 */
+}
+body {
+  background: rgb(113,147,193);/*色は任意*/
+}
