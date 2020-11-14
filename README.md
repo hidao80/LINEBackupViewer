@@ -1,7 +1,7 @@
 # LINE風LINEバックアップテキストデータビュアー
 
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE.md)
-![VanillaJS](https://img.shields.io/badge/VanillaJS-brightgreen.svg)
+[![VanillaJS](https://img.shields.io/badge/Framework-VanillaJS-blue.svg)](https://nodejs.org/ja/)
 ![hidao quality](https://img.shields.io/badge/hidao-quality-orange.svg)
 
 LINEで「トーク履歴を送信」で取得できる味気ないトーク履歴をLINEのトーク画面風の見た目に変換するWebアプリケーションです。
@@ -12,4 +12,7 @@ LINEで「トーク履歴を送信」で取得できる味気ないトーク履�
 
 - [x] デフォルト画面のダウンロード（仮）ができる
 - [x] ダウンロードボタンをクックすると、画面に描画されているメッセージをHTMLファイルとしてダウンロードする
-- [ ] ログのアップロードすると、画面にLINE風に描画する
+- [x] ログのアップロードすると、画面にLINE風に描画する
+- [ ] グループLINEのトークで本人を識別する
+- [ ] 日付の区切りが入る
+- [ ] 各投稿時刻を表示する
