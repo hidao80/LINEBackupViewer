@@ -137,6 +137,36 @@ body {
 }
 
 /**
+ * ログファイル（プレーンテキスト）のアップロード
+ */
+function uploadLogTextFile(e) {
+  // ファイルのアップロード
+
+  // アップロードされたファイルからテキストを抽出
+  const text = "";
+
+  // テキストをHTMLに成形
+  const html = convertLogTextToHTML(text);
+
+  // 成形したHTMLをプレビュー画面に適応
+  $("contents").innerHTML = html;
+}
+
+/**
+ * アップロードされたログファイルからHTMLのコンテンツ部分をHTMLに変換する
+ */
+function convertLogTextToHTML( text ) {
+  let html = `<div class="balloon_r">
+  <p class="says">あ</p>
+</div>
+<div class="balloon_l">
+  <p class="says">うん</p>
+</div>`;
+
+  return html;
+}
+
+/**
  * アップロードされたファイルからお相手の名前を取得する
  */
 function getOpponetName() {
@@ -163,4 +193,5 @@ function downloadHTMLFile(e) {
 
 window.onload = () => {
   $("download_button").addEventListener("click", e => downloadHTMLFile(e));
+  $("upload_button").addEventListener("click", e => uploadLogTextFile(e));
 }
