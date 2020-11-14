@@ -19,7 +19,7 @@ var $ = id => {
  * ID を入れると DOM Element を返す
  */
 function getOutputHTML() {
-  const html = `<!DOCTYPE html>
+  let html = `<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -124,30 +124,9 @@ body {
 </head>
 <body>
   <div id="container">
-    <div id="contants" class="contants">
-      <div class="balloon_r">
-        <p class="says">使い方は?</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">まず、上のメニューの「アップロード」ボタンを押して、LINEトークのバックアップファイルをアップロードします。</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">ファイル名が「[LINE] &lt;相手の名前&gt;とのトーク.txt」となっているものです。</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">「ダウンロード」ボタンが有効になったら、「ダウンロード」ボタンをタップします。</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">バックアップファイルの内容をLINEのトーク画面風に変換したHTMLファイルがダウンロードされます。</p>
-      </div>
-      <div class="balloon_r">
-        <p class="says">ふーん</p>
-      </div>
-      <div class="balloon_r">
-        <p class="says">ありがとう！<br>使ってみる！</p>
-      </div>
-    </div>
-    <div id="footer">
+    <div id="contents" class="contents">`;
+ html += $("contents").innerHTML;
+ html += `<div id="footer">
       <!-- とりあえず使わない -->
     </div>
   </div>
