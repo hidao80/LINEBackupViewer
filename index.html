@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LINE バックアップビュアー</title>
-  <!--
-    <link rel="stylesheet" href="css/linelikefromtotchira.css" type="text/css">
-  -->
   <link rel="stylesheet" href="css/linelikefromstand_4u_.css" type="text/css">
+  <link rel="stylesheet" href="css/serveronly.css" type="text/css">
   <script src="js/main.js"></script>
 </head>
 <body>
@@ -41,6 +39,12 @@
     </div>
     <div id="footer">
       <!-- とりあえず使わない -->
+    </div>
+    <div class="hidden">
+      <form id="upload_form">
+        <input type="file" accept=".txt" id="upload_file"/>
+        <input type="submit"/>
+      </form>
     </div>
   </div>
 </body>

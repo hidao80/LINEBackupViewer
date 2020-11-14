@@ -2,7 +2,7 @@
  * グローバル変数
  */
 var uploadFileName;
-var opponentNmae;
+var opponentName;
 
 /**
  * 定数
@@ -137,32 +137,94 @@ body {
 }
 
 /**
- * ログファイル（プレーンテキスト）のアップロード
+ * LINEログファイル（プレーンテキスト）の選択
+ */
+function selectLogTextFile(e) {
+  // ファイルの選択をしてからアップロードする
+  $("upload_file").click();
+}
+
+/**
+ * LINEログファイル（プレーンテキスト）のアップロード
  */
 function uploadLogTextFile(e) {
-  // ファイルのアップロード
+  // ファイル要素から、選択されたファイルを取得する
+  const files = $("upload_file").files;
+
+  // ファイルが選択されていなかったら終了
+  if (files.length === 0) {
+    alert("ファイルが選択されていません");
+    return false;
+  }
+
+  // 1つ目のファイルを取得する
+  const file = files[0];
 
   // アップロードされたファイルからテキストを抽出
-  const text = "";
+  const reader = new FileReader();
+  reader.readAsText(file);
+  reader.onload = () => {
+    // 成形したHTMLをプレビュー画面に適応
+    $("contents").innerHTML = convertLogTextToHTML(reader.result);
+  }
 
-  // テキストをHTMLに成形
-  const html = convertLogTextToHTML(text);
-
-  // 成形したHTMLをプレビュー画面に適応
-  $("contents").innerHTML = html;
+  // Submitイベントをキャンセルする
+  return false;
 }
 
 /**
  * アップロードされたログファイルからHTMLのコンテンツ部分をHTMLに変換する
  */
 function convertLogTextToHTML( text ) {
+  console.log(text);
+  let html = "";
+/*
   let html = `<div class="balloon_r">
   <p class="says">あ</p>
 </div>
 <div class="balloon_l">
   <p class="says">うん</p>
 </div>`;
+*/
+  let result = text.match(/\[LINE\]\s(?<opponentName>.+)とのトーク履歴/);
+  opponentName = result.groups.opponentName;
 
+  let baloonClass;
+  let msg = "[LINE] " + opponentName + "とのトーク履歴です。";
+  let groups;
+  text.split('\n').forEach( (item) => {
+    let res = item.match(/\d\d?:\d\d\t(?<userName>.+)\t(?<firstLine>.+)/);
+    // 読み込んだ行がメッセージ先頭行ならば、メッセージ変数を更新する
+    if (res !== null) {
+      // すでにあるメッセージをHTMLに成形
+      html += `<div class="${baloonClass}">
+<p class="says">${msg}</p>
+</div>`;
+
+      // 発言者ユーザ名取得し、相手の名前だったとは左側に、
+      // 相手の名前でなければ右側に表示する
+      // この仕様はグループトークだと破綻する
+      groups = res.groups;
+      baloonClass = opponentName === groups.userName ? "balloon_l" : "balloon_r";
+      console.log(opponentName, groups.userName, groups.firstLine, baloonClass);
+      msg = groups.firstLine;
+    } else if (!item.match(/\[LINE\]\s.+とのトーク履歴/) && !item.match(/\d\d\d\d/) && item.trim() !== "") {
+      // 読み込んだ行がメッセージ先頭行でなければ、メッセージ変数に改行して追記する
+      msg += "<br>" + item;
+    }
+  });
+
+  console.log(opponentName, groups.userName,msg);
+  // 最後のメッセージを出力
+  if (groups.userName !== undefined) {
+    baloonClass = opponentName === groups.userName ? "balloon_l" : "balloon_r";
+
+    html += `<div class="${baloonClass}">
+<p class="says">${msg}</p>
+</div>`;
+  }
+
+  console.log(html);
   return html;
 }
 
@@ -170,9 +232,7 @@ function convertLogTextToHTML( text ) {
  * アップロードされたファイルからお相手の名前を取得する
  */
 function getOpponetName() {
-  const name = "hidao";
-
-  return name;
+  return opponentName === undefined ? "サンプル" : opponentName;
 }
 
 /**
@@ -193,5 +253,6 @@ function downloadHTMLFile(e) {
 
 window.onload = () => {
   $("download_button").addEventListener("click", e => downloadHTMLFile(e));
-  $("upload_button").addEventListener("click", e => uploadLogTextFile(e));
+  $("upload_button").addEventListener("click", e => selectLogTextFile(e));
+  $("upload_file").addEventListener("change", e => uploadLogTextFile(e));
 }
