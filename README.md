@@ -6,7 +6,7 @@
 
 LINEで「トーク履歴を送信」で取得できる味気ないトーク履歴をLINEのトーク画面風の見た目に変換するWebアプリケーションです。
 
-ご利用は http://hidao80.github.io/LINEBackupViewer/ からどうぞ。
+ご利用は https://hidao80.github.io/LINEBackupViewer/ からどうぞ。
 
 ## ToDo
 
