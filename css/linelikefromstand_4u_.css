@@ -1,3 +1,6 @@
+html {
+  font-family: sans-serif;
+}
 /*吹き出し*/
 .balloon_l,
 .balloon_r{
