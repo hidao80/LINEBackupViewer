@@ -26,7 +26,10 @@ function getOutputHTML() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LINE バックアップビュアー</title>
   <style>
-  /*吹き出し*/
+html {
+  font-family: sans-serif;
+}
+/*吹き出し*/
 .balloon_l,
 .balloon_r{
   margin: 10px 0;
