@@ -9,6 +9,7 @@ html {
   justify-content: flex-start;
   align-items: flex-start; /*縦位置を上揃え*/
 /*   align-items: center; */ /*縦位置を真ん中揃え*/
+/*   align-items: flex-end; /*縦位置を下揃え*/
 }
 .balloon_r{
   justify-content:flex-end;
@@ -46,6 +47,7 @@ html {
 /*   align-items: center; */
 }
 .says p{
+  display: inline;
   margin:8px 0 0 !important; 
 }
 .says p:first-child{
@@ -94,4 +96,21 @@ html {
 }
 body {
   background: rgb(113,147,193);/*色は任意*/
+}
+div.prop {
+  padding-left: 5px;
+  padding-right: 5px;
+  color: white;
+  font-size: xx-small;
+  align-self: flex-end; /*縦位置を下揃え*/
+}
+div.title,
+div.date {
+  text-align: center;
+  color: white;
+  vertical-align: bottom;
+}
+div.date:before,
+div.date:after {
+  content: ' ─── ';
 }
