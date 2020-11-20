@@ -104,11 +104,16 @@ div.prop {
   font-size: xx-small;
   align-self: flex-end; /*縦位置を下揃え*/
 }
-div.title,
-div.date {
+div.title {
   text-align: center;
   color: white;
   vertical-align: bottom;
+}
+div.date {
+  text-align: center;
+  color: lightgray;
+  vertical-align: bottom;
+  font-size: xx-small;
 }
 div.date:before,
 div.date:after {

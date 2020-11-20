@@ -132,11 +132,16 @@ function getOutputHTML() {
     font-size: xx-small;
     align-self: flex-end; /*縦位置を下揃え*/
   }
-  div.title,
-  div.date {
+  div.title {
     text-align: center;
     color: white;
     vertical-align: bottom;
+  }
+  div.date {
+    text-align: center;
+    color: lightgray;
+    vertical-align: bottom;
+    font-size: xx-small;
   }
   div.date:before,
   div.date:after {
@@ -175,7 +180,7 @@ function uploadLogTextFile(e) {
 
   // ファイルが選択されていなかったら終了
   if (files.length === 0) {
-    alert("ファイルが選択されていません");
+//    alert("ファイルが選択されていません");
     return false;
   }
 
@@ -198,56 +203,38 @@ function uploadLogTextFile(e) {
  * アップロードされたログファイルからHTMLのコンテンツ部分をHTMLに変換する
  */
 function convertLogTextToHTML( text ) {
-  console.log(text);
   let html = "";
-/*
-  let html = `<div class="balloon_r">
-  <p class="says">あ</p>
-</div>
-<div class="balloon_l">
-  <p class="says">うん</p>
-</div>`;
-*/
-
   let groups, res, r, msg = "", line = 1;
   text.split('\n').forEach( (item) => {
-    console.log(item);
-    if (item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t(?<firstLine>.+)/) !== null) {
-      res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t(?<firstLine>.+)/);
-
+    if ((res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t(?<firstLine>.+)/)) !== null) {
       if (msg !== "") {
         html += writeMsg( groups, msg );
       }
       groups = res.groups;
       msg = groups.firstLine;
       line++;    
-    } else if (item.match(/^(?<date>\d+\/\d+\/\d+\(.+\)$)/) !== null) {
-      res = item.match(/^(?<date>\d+\/\d+\/\d+\(.+\)$)/);
-
+    } else if ((res = item.match(/^(?<date>\d+\/\d+\/\d+\(.+\)$)/)) !== null) {
       if (msg !== "" && groups !== undefined) {
         html += writeMsg( groups, msg );
       }
       html += `<div class="date">${res.groups.date}</div>`;
       msg = "";
       line++;    
-    } else if (item.match(/\[LINE\]\s(?<opponentName>.+)とのトーク履歴/) !== null) {
-      res = item.match(/\[LINE\]\s(?<opponentName>.+)とのトーク履歴/);
-
+    } else if ((res = item.match(/\[LINE\]\s(?<opponentName>.+)とのトーク履歴/)) !== null) {
       setOpponentName( res.groups.opponentName );
       html += `<div class="title">${getOpponentName()}とのトーク履歴</div>`;
       line++;    
-    } else if (item.match(/^保存日時：/) !== null && line == 2) {
+    } else if (item.match(/^保存日時：/) !== null && line <= 2) {
       // nop
+      line++;    
     } else if (item.trim() !== "") {
       msg += "<br>" + item;
+      line++;    
     }
-
   });
 
   // 最後のメッセージを出力
   html += writeMsg( groups, msg );
-
-  console.log(html);
   return html;
 }
 
@@ -258,7 +245,7 @@ function convertLogTextToHTML( text ) {
  * @returns HTML 形式の出力文字列
  */
 function writeMsg( groups, msg ) {
-  const baloonClass = getOpponentName().trim() === groups.userName.trim() ? "balloon_l" : "balloon_r";
+  const baloonClass = getOpponentName().trim() === groups.userName ? "balloon_l" : "balloon_r";
 
   // すでにあるメッセージをHTMLに成形
   let html = `<div class="${baloonClass}">`;
