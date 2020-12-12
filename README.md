@@ -2,7 +2,9 @@
 
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE.md)
 [![VanillaJS](https://img.shields.io/badge/Framework-VanillaJS-blue.svg)](https://nodejs.org/ja/)
+![Not compatible](https://img.shields.io/badge/IE-Not_compatible-red.svg)
 ![hidao quality](https://img.shields.io/badge/hidao-quality-orange.svg)
+
 
 LINEで「トーク履歴を送信」で取得できる味気ないトーク履歴をLINEのトーク画面風の見た目に変換するWebアプリケーションです。
 
