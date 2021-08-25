@@ -98,7 +98,7 @@ function convertLogTextToHTML(text) {
     let html = "";
     let groups, res, r, msg = "", line = 1;
 
-    text.split('\n').forEach(item => {
+    text.split(/\r\n|\n|\r/).forEach(item => {
         if ((res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t"?(?<msg>.+)/)) !== null) {
             // メッセージの先頭行の場合
             if (msg !== "" && groups !== undefined) {
