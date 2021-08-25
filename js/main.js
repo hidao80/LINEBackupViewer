@@ -34,14 +34,14 @@ function getOutputHTML() {
 <body>
     <div id="container">
         <div id="contents" class="contents">`;
-        html += _$("contents").innerHTML;
-        html += `<div id="footer">
+    html += _$("contents").innerHTML;
+    html += `<div id="footer">
         </div>
     </div>
 </body>
 </html>`;
 
-  return html;
+    return html;
 }
 
 /**
@@ -95,21 +95,21 @@ function uploadLogTextFile(e) {
 /**
  * アップロードされたログファイルからHTMLのコンテンツ部分をHTMLに変換する
  */
-function convertLogTextToHTML( text ) {
+function convertLogTextToHTML(text) {
     let html = "";
     let groups, res, r, msg = "", line = 1;
 
     text.split('\n').forEach(item => {
         if ((res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t"?(?<msg>.+)/)) !== null) {
             if (msg !== "" && groups !== undefined) {
-                html += writeMsg( groups, msg );
+                html += writeMsg(groups, msg);
             }
             groups = res.groups;
             msg = res.groups.msg;
             line++;
         } else if ((res = item.match(/^(?<date>\d+\/\d+\/\d+\(.+\)$)/)) !== null) {
             if (msg !== "" && groups !== undefined) {
-                html += writeMsg( groups, msg );
+                html += writeMsg(groups, msg);
             }
             html += `<div class="date">${res.groups.date}</div>`;
             msg = "";
@@ -128,7 +128,7 @@ function convertLogTextToHTML( text ) {
     });
 
     // 最後のメッセージを出力
-    html += writeMsg( groups, msg );
+    html += writeMsg(groups, msg);
     return html;
 }
 
@@ -142,17 +142,17 @@ function nameToColorCode(name) {
  * @param msg string 投稿され内容
  * @returns HTML 形式の出力文字列
  */
-function writeMsg( groups, msg ) {
+function writeMsg(groups, msg) {
     // すでにあるメッセージをHTMLに成形
     return ownerName == groups.userName.trim()
-    ? ` <div class="balloon_r">
+        ? ` <div class="balloon_r">
             <div class="prop">既読<br>${groups.at}</div>
             <p class="says">${msg.trim()}</p>
             <div class="balloon_r-after" style="background-color:#${nameToColorCode(ownerName)}">
                 <div>${ownerName.slice(0, 2)}</div>
             </div>
         </div>`
-    : ` <div class="balloon_l">
+        : ` <div class="balloon_l">
             <div class="balloon_l-before" style="background-color:#${nameToColorCode(groups.userName)}">
                 <div>${groups.userName.slice(0, 2)}</div>
                 </div>
@@ -160,11 +160,11 @@ function writeMsg( groups, msg ) {
                     <div class="prop">${groups.at}</div>
                 </div>
             </div>
-        </div>`;
+            </div>`;
 }
 
 
-function setUserNameSelect( text ) {
+function setUserNameSelect(text) {
     const lines = text.split('\n');
     const users = {};
 
@@ -191,7 +191,7 @@ function downloadHTMLFile(e) {
     const outputDataString = getOutputHTML();
     const downloadFileName = "[LINE] " + title + ".html"
     downLoadLink.download = downloadFileName;
-    downLoadLink.href = URL.createObjectURL(new Blob([outputDataString], {type: "text/html"}));
+    downLoadLink.href = URL.createObjectURL(new Blob([outputDataString], { type: "text/html" }));
     downLoadLink.dataset.downloadurl = ["text/html", downloadFileName, downLoadLink.href].join(":");
     downLoadLink.click();
 }

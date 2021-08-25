@@ -3,11 +3,11 @@
 }
 
 #menu_bar {
-    width: 100%;
+    width  : 100%;
     display: flex;
 }
 
-#menu_bar > button {
-    flex: 1;
+#menu_bar>button {
+    flex        : 1;
     margin-right: 1px;
 }
