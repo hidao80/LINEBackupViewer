@@ -1,7 +1,6 @@
 /**
  * グローバル変数
  */
-var uploadFileName;
 var ownerName;
 var title;
 
@@ -101,6 +100,7 @@ function convertLogTextToHTML(text) {
 
     text.split('\n').forEach(item => {
         if ((res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t"?(?<msg>.+)/)) !== null) {
+            // メッセージの先頭行の場合
             if (msg !== "" && groups !== undefined) {
                 html += writeMsg(groups, msg);
             }
@@ -108,6 +108,7 @@ function convertLogTextToHTML(text) {
             msg = res.groups.msg;
             line++;
         } else if ((res = item.match(/^(?<date>\d+\/\d+\/\d+\(.+\)$)/)) !== null) {
+            // 日付行の場合
             if (msg !== "" && groups !== undefined) {
                 html += writeMsg(groups, msg);
             }
@@ -115,13 +116,15 @@ function convertLogTextToHTML(text) {
             msg = "";
             line++;
         } else if ((res = item.match(/\[LINE\]\s(?<userName>.+)とのトーク履歴/)) !== null) {
+            // ファイルヘッダ行の場合
             title = res.groups.userName;
             html += `<div class="title">${title}とのトーク履歴</div>`;
             line++;
         } else if (item.match(/^保存日時：/) !== null && line <= 2) {
-            // nop
+            // 2行目以降の保存日時行は無視する
             line++;
         } else if (item.trim() !== "") {
+            // 空行でなければ、終端のダブルクォーテーションを取り除いて開業してから表示する（複数行メッセージに対応）
             msg += "<br>" + item.replace(/"$/, "");
             line++;
         }
@@ -167,6 +170,7 @@ function writeMsg(groups, msg) {
 function setUserNameSelect(text) {
     const lines = text.split('\n');
     const users = {};
+    let res;
 
     for (const item of lines) {
         if ((res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t(?<firstLine>.+)/)) !== null) {
