@@ -105,7 +105,7 @@ function convertLogTextToHTML(text) {
                 html += writeMsg(groups, msg);
             }
             groups = res.groups;
-            msg = res.groups.msg;
+            msg = res.groups.msg.replace(/^"/, "");  // 複数行にまたがるときの先頭のダブルクォーテーションを除去
             line++;
         } else if ((res = item.match(/^(?<date>\d+\/\d+\/\d+\(.+\)$)/)) !== null) {
             // 日付行の場合
@@ -124,7 +124,7 @@ function convertLogTextToHTML(text) {
             // 2行目以降の保存日時行は無視する
             line++;
         } else if (item.trim() !== "") {
-            // 空行でなければ、終端のダブルクォーテーションを取り除いて開業してから表示する（複数行メッセージに対応）
+            // 空行でなければ、終端のダブルクォーテーションを取り除いて改行してから表示する（複数行メッセージに対応）
             msg += "<br>" + item.replace(/"$/, "");
             line++;
         }
