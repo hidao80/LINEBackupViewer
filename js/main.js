@@ -1,8 +1,19 @@
 /**
  * グローバル変数
  */
-var ownerName;
-var title;
+var global = {
+    // トークの持ち主名
+    ownerName: "",
+
+    // ダウンロードファイルのファイル名
+    title: "",
+
+    // プレビューするかどうかフラグ
+    noRendring: false,
+
+    // LINEのログからHTMLに変換したデータ
+    html: "",
+};
 
 /**
  * 定数
@@ -33,7 +44,7 @@ function getOutputHTML() {
 <body>
     <div id="container">
         <div id="contents" class="contents">`;
-    html += _$("contents").innerHTML;
+    html += global.html;
     html += `<div id="footer">
         </div>
     </div>
@@ -59,6 +70,22 @@ async function repaint() {
         await new Promise(resolve => requestAnimationFrame(resolve));
     }
 };
+
+function getAvailableDownloadNotify() {
+    return `
+    <div class="balloon_l">
+    <div class="balloon_l-before" style="background-color:#${nameToColorCode('報告')}">
+        <div>報告</div>
+        </div>
+            <p class="says">
+                ダウンロードできるようになりました。<br>
+                ファイルサイズが大きすぎるため、プレビューできません。
+            </p>
+            <div class="prop">今</div>
+        </div>
+    </div>
+    </div>`;
+}
 
 /**
  * LINEログファイル（プレーンテキスト）のアップロード
@@ -96,10 +123,23 @@ function uploadLogTextFile(e) {
         // 強制的に再描画する
         await repaint();
 
-        ownerName = _$('userName').value.trim();
+        // 選択したユーザの名前を取得。トークの持ち主とする
+        global.ownerName = _$('userName').value.trim();
+
+        // ダウンロードファイルのファイル名を作成
+        // 1対1のトークでは、後で取得するログに書かれているものを優先する
+        global.title = global.ownerName + "のルーム";
+
+        // 作業変数の初期化
+        global.html = _$("contents").textContent = null
+        global.noRendring = false;
+
+        // ログファイルを読み込んでHTMLに変換
+        global.html = convertLogTextToHTML(reader.result);
 
         // 成形したHTMLをプレビュー画面に適応
-        _$("contents").innerHTML = convertLogTextToHTML(reader.result);
+        // レンダリングするデータが大きすぎる場合は、プレビューできないので代替メッセージを表示する
+        _$("contents").innerHTML = global.noRendring ? getAvailableDownloadNotify() : global.html;
 
         // ダイアログを非表示
         $('#usersNameModal').modal('hide');
@@ -113,12 +153,16 @@ function uploadLogTextFile(e) {
  * アップロードされたログファイルからHTMLのコンテンツ部分をHTMLに変換する
  */
 function convertLogTextToHTML(text) {
-    let html = "";
-    let groups, res, r, msg = "", line = 1, progress = 0;
+    let count = 0, res, line = 0, html = "", progress = 0, groups, msg;
     const lines = text.split(/\r\n|\n|\r/);
+    const total = lines.length;
 
-    for (let item of lines) {
-        if ((res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t"?(?<msg>.+)/)) !== null) {
+    for (let i in lines) {
+        // 進捗を表示（デバッグ用）
+        // progress = Math.floor(++count / total * 100);
+        // console.log(`${progress}%` + " " + count + "/" + total + " " + lines[i]);
+
+        if ((res = lines[i].match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t"?(?<msg>.+)/)) !== null) {
             // メッセージの先頭行の場合
             if (msg !== "" && groups !== undefined) {
                 html += writeMsg(groups, msg);
@@ -126,28 +170,35 @@ function convertLogTextToHTML(text) {
             groups = res.groups;
             msg = res.groups.msg.replace(/^"/, "");  // 複数行にまたがるときの先頭のダブルクォーテーションを除去
             line++;
-        } else if ((res = item.match(/^(?<date>\d+\/\d+\/\d+\(.+\)$)/)) !== null) {
+        } else if ((res = lines[i].match(/^(?<date>\d+\˙\/\d +\/\d+\(.+\)$)/)) !== null) {
             // 日付行の場合
             if (msg !== "" && groups !== undefined) {
                 html += writeMsg(groups, msg);
             }
             html += `<div class="date">${res.groups.date}</div>`;
+
             msg = "";
             line++;
-        } else if ((res = item.match(/\[LINE\]\s(?<userName>.+)とのトーク履歴/)) !== null) {
+        } else if ((res = lines[i].match(/\[LINE\]\s(?<userName>.+)とのトーク履歴/)) !== null) {
             // ファイルヘッダ行の場合
-            title = res.groups.userName;
-            html += `<div class="title">${title}とのトーク履歴</div>`;
+            // タイトルを上書き
+            global.title = res.groups.userName + "とのトーク履歴";
+            html += `<div class="title">${global.title}</div>`;
+
             line++;
-        } else if (item.match(/^保存日時：/) !== null && line <= 2) {
+        } else if (lines[i].match(/^保存日時：/) !== null && global.line <= 2) {
             // 2行目以降の保存日時行は無視する
             line++;
-        } else if (item.trim() !== "") {
+        } else if (lines[i].trim() !== "") {
             // 空行でなければ、終端のダブルクォーテーションを取り除いて改行してから表示する（複数行メッセージに対応）
-            msg += "<br>" + item.replace(/"$/, "");
+            msg += "<br>" + lines[i].replace(/"$/, "");
             line++;
         }
-    };
+
+        if (html.length > 1_000_000) {
+            global.noRendring = true;
+        }
+    }
 
     // 最後のメッセージを出力
     html += writeMsg(groups, msg);
@@ -166,12 +217,12 @@ function nameToColorCode(name) {
  */
 function writeMsg(groups, msg) {
     // すでにあるメッセージをHTMLに成形
-    return ownerName == groups.userName.trim()
+    return global.ownerName == groups.userName.trim()
         ? ` <div class="balloon_r">
             <div class="prop">既読<br>${groups.at}</div>
             <p class="says">${msg.trim()}</p>
-            <div class="balloon_r-after" style="background-color:#${nameToColorCode(ownerName)}">
-                <div>${ownerName.slice(0, 2)}</div>
+            <div class="balloon_r-after" style="background-color:#${nameToColorCode(global.ownerName)}">
+                <div>${global.ownerName.slice(0, 2)}</div>
             </div>
         </div>`
         : ` <div class="balloon_l">
@@ -212,7 +263,7 @@ function downloadHTMLFile(e) {
 
     // ダウンロードするHTML文章の生成
     const outputDataString = getOutputHTML();
-    const downloadFileName = "[LINE] " + title + ".html"
+    const downloadFileName = "[LINE] " + global.title + ".html"
     downLoadLink.download = downloadFileName;
     downLoadLink.href = URL.createObjectURL(new Blob([outputDataString], { type: "text/html" }));
     downLoadLink.dataset.downloadurl = ["text/html", downloadFileName, downLoadLink.href].join(":");
