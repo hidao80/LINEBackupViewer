@@ -75,15 +75,15 @@ function uploadLogTextFile(e) {
     // 1つ目のファイルを取得する
     const file = files[0];
 
+    // ボタン内のスピナーを非表示
+    _$('spinner').style.display = 'none';
+
     // アップロードされたファイルからテキストを抽出
     const reader = new FileReader();
     reader.readAsText(file);
     reader.onload = () => {
         // ユーザ名リストを本人選択モーダルダイアログにセット
         setUserNameSelect(reader.result);
-
-        // ボタン内のスピナーを非表示
-        _$('spinner').style.display = 'none';
 
         // ダイアログを表示
         $('#usersNameModal').modal('show');
