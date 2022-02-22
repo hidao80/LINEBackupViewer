@@ -1,72 +1,86 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LINE バックアップビュアー</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/linelikefromstand_4u_.css" type="text/css">
-  <link rel="stylesheet" href="css/serveronly.css" type="text/css">
-  <script src="js/main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE バックアップビュアー</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/linelikefromstand_4u_.css" type="text/css">
+    <link rel="stylesheet" href="css/serveronly.css" type="text/css">
+    <script src="js/main.js"></script>
 </head>
+
 <body>
-  <div id="container">
-    <div id="menu_bar">
-      <button id="upload_button" class="btn btn-dark">アップロード</button>
-      <button id="download_button" class="btn btn-dark">ダウンロード</button>
-    </div>
-    <div id="contents" class="contents">
-      <div class="balloon_r">
-        <p class="says">使い方は?</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">まず、上のメニューの「アップロード」ボタンを押して、LINEトークのバックアップファイルをアップロードします。</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">ファイル名が「[LINE] &lt;相手の名前&gt;とのトーク.txt」となっているものです。</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">「ダウンロード」ボタンが有効になったら、「ダウンロード」ボタンをタップします。</p>
-      </div>
-      <div class="balloon_l">
-        <p class="says">バックアップファイルの内容をLINEのトーク画面風に変換したHTMLファイルがダウンロードされます。</p>
-      </div>
-      <div class="balloon_r">
-        <p class="says">ふーん</p>
-      </div>
-      <div class="balloon_r">
-        <p class="says">ありがとう！<br>使ってみる！</p>
-      </div>
-    </div>
-    <div id="footer">
-      <!-- とりあえず使わない -->
-    </div>
-    <div class="hidden">
-      <form id="upload_form">
-        <input type="file" accept=".txt" id="upload_file"/>
-        <input type="submit"/>
-      </form>
-    </div>
-  </div>
-  <div class="modal" tabindex="-1" role="dialog" id="usersNameModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">あなたの名前を選択してください</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+    <div id="container">
+        <div id="menu_bar">
+            <button id="upload_button" class="btn btn-dark">アップロード</button>
+            <button id="download_button" class="btn btn-dark">ダウンロード</button>
         </div>
-        <div class="modal-body" id="modal-body">
+        <div id="contents" class="contents">
+            <div class="balloon_r">
+                <p class="says">使い方は?</p>
+            </div>
+            <div class="balloon_l">
+                <p class="says">まず、上のメニューの「アップロード」ボタンを押して、LINEトークのバックアップファイルをアップロードします。</p>
+            </div>
+            <div class="balloon_l">
+                <p class="says">ファイル名が「[LINE] &lt;相手の名前&gt;とのトーク.txt」となっているものです。</p>
+            </div>
+            <div class="balloon_l">
+                <p class="says">「ダウンロード」ボタンが有効になったら、「ダウンロード」ボタンをタップします。</p>
+            </div>
+            <div class="balloon_l">
+                <p class="says">バックアップファイルの内容をLINEのトーク画面風に変換したHTMLファイルがダウンロードされます。</p>
+            </div>
+            <div class="balloon_r">
+                <p class="says">ふーん</p>
+            </div>
+            <div class="balloon_r">
+                <p class="says">ありがとう！<br>使ってみる！</p>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="modal-choice">選択</button>
+        <div id="footer">
+            <!-- とりあえず使わない -->
         </div>
-      </div>
+        <div class="hidden">
+            <form id="upload_form">
+                <input type="file" accept=".txt" id="upload_file" />
+                <input type="submit" />
+            </form>
+        </div>
     </div>
-  </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <div class="modal" tabindex="-1" role="dialog" id="usersNameModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">あなたの名前を選択してください</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modal-choice">
+                        <span id="spinner" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true"></span>
+                        選択
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

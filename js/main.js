@@ -52,6 +52,15 @@ function selectLogTextFile(e) {
 }
 
 /**
+ * 強制的に再描画させるおまじない
+ */
+async function repaint() {
+    for (let i = 0; i < 2; i++) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+};
+
+/**
  * LINEログファイル（プレーンテキスト）のアップロード
  */
 function uploadLogTextFile(e) {
@@ -73,11 +82,20 @@ function uploadLogTextFile(e) {
         // ユーザ名リストを本人選択モーダルダイアログにセット
         setUserNameSelect(reader.result);
 
+        // ボタン内のスピナーを非表示
+        _$('spinner').style.display = 'none';
+
         // ダイアログを表示
         $('#usersNameModal').modal('show');
     }
 
-    _$('modal-choice').onclick = e => {
+    _$('modal-choice').onclick = async (e) => {
+        // ボタン内のスピナーを表示
+        _$('spinner').style.display = 'inline-block';
+
+        // 強制的に再描画する
+        await repaint();
+
         ownerName = _$('userName').value.trim();
 
         // 成形したHTMLをプレビュー画面に適応
@@ -96,9 +114,10 @@ function uploadLogTextFile(e) {
  */
 function convertLogTextToHTML(text) {
     let html = "";
-    let groups, res, r, msg = "", line = 1;
+    let groups, res, r, msg = "", line = 1, progress = 0;
+    const lines = text.split(/\r\n|\n|\r/);
 
-    text.split(/\r\n|\n|\r/).forEach(item => {
+    for (let item of lines) {
         if ((res = item.match(/(?<at>\d\d?:\d\d)\t(?<userName>.+)\t"?(?<msg>.+)/)) !== null) {
             // メッセージの先頭行の場合
             if (msg !== "" && groups !== undefined) {
@@ -128,7 +147,7 @@ function convertLogTextToHTML(text) {
             msg += "<br>" + item.replace(/"$/, "");
             line++;
         }
-    });
+    };
 
     // 最後のメッセージを出力
     html += writeMsg(groups, msg);
