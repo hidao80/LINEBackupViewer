@@ -27,3 +27,11 @@ LINEで「トーク履歴を送信」で取得できる味気ないトーク履�
 - [x] 日付の区切りが入る
 - [x] 各投稿時刻を表示する
 - [x] OS によるフォントとボタンスタイルの違いを統一
+
+## Contributors
+
+<a href="https://github.com/hidao80/LINEBackupViewer/graphs/contributors">
+  <img width="72" src="https://contrib.rocks/image?repo=hidao80/LINEBackupViewer" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
